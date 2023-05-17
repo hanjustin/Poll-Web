@@ -1,0 +1,49 @@
+jenkins:
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+       - id: ${JENKINS_ADMIN_ID}
+         password: ${JENKINS_ADMIN_PASSWORD}
+  authorizationStrategy:
+    globalMatrix:
+      permissions:
+        - "USER:Overall/Administer:admin"
+        - "GROUP:Overall/Read:authenticated"
+
+security:
+  queueItemAuthenticator:
+    authenticators:
+    - global:
+        strategy: triggeringUsersAuthorizationStrategy
+
+unclassified:
+  location:
+    url: http://localhost:8080/
+
+jobs:
+  - script: >
+      folder('testjobs')
+  - script: >
+      pipelineJob('testjobs/default-agent') {
+          properties {
+              pipelineTriggers {
+                  triggers {
+                      cron {
+                          spec('H/5 * * * *')  // Poll SCM every 5 minutes
+                      }
+                  }
+              }
+          }
+          definition {
+              cpsScm {
+                  scm {
+                      git {
+                          remote { url 'https://github.com/hanjustin/Poll-Web.git' }
+                          branch '*/main'
+                          extensions {}
+                      }
+                  }
+              }
+          }
+      }
