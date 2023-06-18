@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  jenkins:
+    build: .
+    environment:
+      - JENKINS_ADMIN_ID=admin
+      - JENKINS_ADMIN_PASSWORD=password
+      - DB_HOST=postgres
+    depends_on:
+      - postgres
+    ports:
+      - '8080:8080'
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=djangoPostgreSQL
+      - POSTGRES_USER=mydatabaseuser
+      - POSTGRES_PASSWORD=mypassword
+    ports:
+      - '5432:5432'

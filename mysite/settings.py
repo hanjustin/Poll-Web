@@ -1,3 +1,5 @@
+import os
+
 """
 Django settings for mysite project.
 
@@ -80,7 +82,7 @@ DATABASES = {
         "NAME": "djangoPostgreSQL",
         "USER": "mydatabaseuser",
         "PASSWORD": "mypassword",
-        "HOST": "127.0.0.1",
+        "HOST": os.environ.get('DB_HOST', "127.0.0.1"),
         "PORT": "5432",
     }
 }
