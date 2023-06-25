@@ -29,8 +29,8 @@ jobs:
           properties {
               pipelineTriggers {
                   triggers {
-                      cron {
-                          spec('H/5 * * * *')  // Poll SCM every 5 minutes
+                      pollSCM {
+                          scmpoll_spec('H/5 * * * *')  // Poll SCM every 5 minutes
                       }
                   }
               }
